@@ -75,8 +75,19 @@ export const environment = {
 | `/books` | Lista de libros (en tabla o en tarjetas): buscador, paginación, editar y borrar |
 | `/books/new` | Nuevo libro |
 | `/books/:id/edit` | Editar libro |
+| `/favourites` | Solo los libros marcados como favoritos |
 
 El texto del buscador y la página están en la URL (`/authors?q=cervantes&page=2`).
+
+## Libros favoritos
+
+En la lista de libros (en tabla y en tarjetas) cada libro tiene una estrella para marcarlo o desmarcarlo
+como favorito. La pantalla **Favoritos** enseña solo esos libros, y la barra de arriba lleva la cuenta.
+
+Los favoritos son estado global con Nanostores (`src/stores/favourites.ts`): un `atom` con los ids de los
+libros. `FavouriteButton`, `FavouritesList` y `Navbar` lo leen con `useStore`, así que al marcar una estrella
+se actualizan los tres a la vez sin pasarse props. Se guardan en `localStorage`, así que siguen ahí al
+recargar, y al borrar un libro también se quita de favoritos.
 
 ## Estructura del proyecto
 
@@ -90,6 +101,8 @@ src/
 │   ├── AuthorCard.tsx     # autor en modo tarjeta (y RoleBadge)
 │   ├── BooksList.tsx      # lista de libros
 │   ├── BookForm.tsx       # crear y editar libros
+│   ├── FavouriteButton.tsx # estrella para marcar y desmarcar un libro como favorito
+│   ├── FavouritesList.tsx # lista con solo los libros favoritos
 │   ├── Pagination.tsx     # paginación, componente hijo de las dos listas
 │   ├── ConfirmModal.tsx   # ventana para confirmar antes de borrar
 │   ├── ViewToggle.tsx     # botones para ver las listas en tabla o en tarjetas
@@ -105,7 +118,8 @@ src/
 ├── context/
 │   └── ToastContext.tsx   # avisos globales con la Context API
 ├── stores/
-│   └── viewMode.ts        # estado global (Nanostores): lista o tarjetas
+│   ├── viewMode.ts        # estado global (Nanostores): lista o tarjetas
+│   └── favourites.ts      # estado global (Nanostores): ids de los libros favoritos
 ├── models/                # Author, Book y sus tipos
 ├── utils/
 │   ├── format.ts          # languageName, truncate, formatDate, formatPrice, initials

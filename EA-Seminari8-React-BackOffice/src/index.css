@@ -418,6 +418,25 @@ label.checkbox {
   color: #fff;
 }
 
+/* Botón de favorito: una estrella sin fondo que se pinta de amarillo al marcarla */
+button.favourite {
+  padding: 0.3rem 0.5rem;
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+button.favourite:hover:not(:disabled) {
+  background: #fff8e1;
+}
+
+button.favourite.active {
+  border-color: #f5b301;
+  color: #f5b301;
+}
+
 /* Ventana de confirmación */
 .overlay {
   position: fixed;

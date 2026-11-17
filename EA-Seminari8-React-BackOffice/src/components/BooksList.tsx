@@ -7,10 +7,12 @@ import { useApiList } from '../hooks/useApiList';
 import { useListControls } from '../hooks/useListControls';
 import type { Book } from '../models';
 import { bookService } from '../services/book.service';
+import { removeFavourite } from '../stores/favourites';
 import { booksView } from '../stores/viewMode';
 import { errorMessage } from '../utils/api-error';
 import { formatPrice, languageName, truncate } from '../utils/format';
 import { ConfirmModal } from './ConfirmModal';
+import { FavouriteButton } from './FavouriteButton';
 import { Pagination } from './Pagination';
 import { ViewToggle } from './ViewToggle';
 
@@ -59,6 +61,8 @@ export function BooksList() {
     try {
       await bookService.deleteBook(bookToDelete._id);
       removeItem(bookToDelete._id);
+      // Si estaba en favoritos también lo quito de ahí
+      removeFavourite(bookToDelete._id);
       showToast(`Libro "${bookToDelete.title}" borrado`);
     } catch (err) {
       setActionError(errorMessage(err));
@@ -137,6 +141,7 @@ export function BooksList() {
                       ))}
                     </td>
                     <td className="actions">
+                      <FavouriteButton bookId={book._id} />
                       {/* Aquí el id solo va en la URL; el formulario pide el libro a la API */}
                       <Link className="button secondary" to={`/books/${book._id}/edit`}>
                         Editar
@@ -188,6 +193,7 @@ export function BooksList() {
                     </div>
                   </div>
                   <div className="card-actions">
+                    <FavouriteButton bookId={book._id} />
                     <Link className="button secondary" to={`/books/${book._id}/edit`}>
                       Editar
                     </Link>
